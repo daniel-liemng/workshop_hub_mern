@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Grid,
@@ -11,6 +12,8 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+
+import { useUserContext } from "../../context/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   rootStyle: {
@@ -33,23 +36,39 @@ const useStyles = makeStyles((theme) => ({
 const Login = ({ handleChange }) => {
   const classes = useStyles();
 
+  const history = useHistory();
+
+  const { login, error, clearError, isAuthenticated } = useUserContext();
+
   const initialValues = {
     email: "",
     password: "",
   };
+
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Please enter a valid email")
       .required("Required"),
     password: Yup.string().required("Required"),
   });
+
   const onSubmit = (values, props) => {
-    console.log(values);
+    login({ email: values.email, password: values.password });
+
     setTimeout(() => {
-      props.resetForm();
       props.setSubmitting(false);
     }, 2000);
+
+    setTimeout(() => {
+      clearError();
+    }, 5000);
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.replace("/");
+    }
+  }, [isAuthenticated, history]);
 
   return (
     <Grid className={classes.rootStyle}>
@@ -59,6 +78,13 @@ const Login = ({ handleChange }) => {
         </Avatar>
         <Typography variant='h5'>Sign In</Typography>
       </Grid>
+
+      {error && (
+        <Typography variant='body1' className='error-msg'>
+          {error}
+        </Typography>
+      )}
+
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}

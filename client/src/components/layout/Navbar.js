@@ -77,6 +77,9 @@ const Navbar = () => {
       <Button component={Link} to='/profiles' color='inherit'>
         Developers
       </Button>
+      <Button component={Link} to='/profile' color='inherit'>
+        Profile
+      </Button>
       <Button component={Link} to='/auth' color='inherit'>
         Login
       </Button>
@@ -104,6 +107,9 @@ const Navbar = () => {
     <List>
       <ListItem button component={Link} to='/profiles'>
         <ListItemText>Developers</ListItemText>
+      </ListItem>
+      <ListItem button component={Link} to='/profile'>
+        <ListItemText>Profile</ListItemText>
       </ListItem>
       <ListItem button component={Link} to='/auth'>
         <ListItemText>Login</ListItemText>

@@ -27,7 +27,9 @@ const registerUser = async (req, res) => {
 
     const createdUser = await newUser.save();
 
-    res.status(201).json({ token: generateToken(createdUser._id) });
+    res
+      .status(201)
+      .json({ token: generateToken(createdUser._id), userId: createdUser._id });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

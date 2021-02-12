@@ -1,3 +1,13 @@
 .MuiFormHelperText-root {
   color: #e63946 !important;
 }
+
+.error-msg {
+  background: #ef476f;
+  color: #fff;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+  padding: 0.5em;
+  padding-left: 1rem;
+  border-radius: 5px;
+}

@@ -35,9 +35,10 @@ const loginUser = async (req, res) => {
     if (user && (await user.matchPassword(password))) {
       res.json({
         token: generateToken(user._id),
+        userId: user._id,
       });
     } else {
-      res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
+      res.status(400).json({ msg: "Invalid Credentials" });
     }
   } catch (err) {
     console.error(err.message);

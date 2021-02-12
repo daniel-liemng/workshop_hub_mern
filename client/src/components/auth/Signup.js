@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Grid,
@@ -11,19 +12,19 @@ import {
   Checkbox,
   FormHelperText,
   FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
   InputLabel,
   Input,
   InputAdornment,
   IconButton,
+  CircularProgress,
 } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+
+import { useUserContext } from "../../context/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   rootStyle: {
@@ -45,6 +46,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Signup = ({ handleChange }) => {
   const classes = useStyles();
+
+  const history = useHistory();
+
+  const { register, error, clearError, isAuthenticated } = useUserContext();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -73,16 +78,30 @@ const Signup = ({ handleChange }) => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password")], "Password does not match")
       .required("Required"),
-    terms: Yup.boolean().oneOf([true], "Please accept the terms & conditions"),
+    terms: Yup.bool().oneOf([true], "Please accept the terms & conditions"),
   });
 
   const onSubmit = (values, props) => {
-    console.log(values);
+    register({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    });
+
     setTimeout(() => {
-      props.resetForm();
       props.setSubmitting(false);
     }, 2000);
+
+    setTimeout(() => {
+      clearError();
+    }, 5000);
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.replace("/");
+    }
+  }, [isAuthenticated, history]);
 
   return (
     <Grid className={classes.rootStyle}>
@@ -95,6 +114,13 @@ const Signup = ({ handleChange }) => {
           Please fill this form to create an account !
         </Typography>
       </Grid>
+
+      {error && (
+        <Typography variant='body1' className='error-msg'>
+          {error}
+        </Typography>
+      )}
+
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -191,7 +217,7 @@ const Signup = ({ handleChange }) => {
               className={classes.btnStyle}
               fullWidth
             >
-              {props.isSubmitting ? "Loading" : "Sign Up"}
+              {props.isSubmitting ? "Loading" : "Sign up"}
             </Button>
           </Form>
         )}
