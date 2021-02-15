@@ -12,8 +12,12 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(express.json());
+// Set limit for image upload
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
 app.use(cors());
+
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
@@ -23,6 +27,7 @@ app.get("/", (req, res) => res.send("API"));
 
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/profile", require("./routes/profile"));
 
 // Custom error handling
 app.use(notFound);

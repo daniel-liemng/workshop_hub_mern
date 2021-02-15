@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Grid,
@@ -12,6 +12,7 @@ import {
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 
 import user1Photo from "../assets/user1.jpg";
+import { useAppContext } from "../context/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +36,51 @@ const useStyles = makeStyles((theme) => ({
 const Profile = () => {
   const classes = useStyles();
 
+  const { uploadAvatarPhoto, getMyProfile, profile, loading } = useAppContext();
+
+  const [fileInputState, setFileInputState] = useState("");
+  // const [selectedFile, setSelectedFile] = useState("");
+  const [previewSource, setPreviewSource] = useState("");
+  // const [myProfile, setMyProfile] = useState(null);
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+
+    // preview file after choose phto
+    previewFile(file);
+  };
+
+  const previewFile = (file) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+    };
+  };
+
+  const handlePhotoSubmit = (e) => {
+    e.preventDefault();
+    console.log("submit");
+    if (!previewSource) return;
+
+    uploadImage(previewSource);
+  };
+
+  const uploadImage = (base64EncodedImage) => {
+    console.log(base64EncodedImage);
+
+    uploadAvatarPhoto(base64EncodedImage);
+  };
+
+  useEffect(() => {
+    getMyProfile();
+  }, []);
+
+  if (!profile) {
+    return <h2>Loading</h2>;
+  }
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -46,26 +92,46 @@ const Profile = () => {
           </Grid>
         </Grid>
         <Grid container>
-          <Grid item xs={12} sm={4} lg={3} alignItems='center'>
-            <Avatar src={user1Photo} className={classes.avatar} />
-            <div>
-              <input
-                accept='image/*'
-                className={classes.imgInput}
-                id='icon-button-file'
-                type='file'
-              />
-              <label htmlFor='icon-button-file'>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  startIcon={<PhotoCamera />}
-                  component='span'
-                >
-                  Upload photo
-                </Button>
-              </label>
-            </div>
+          <Grid item xs={12} sm={4} lg={3}>
+            <Typography variant='h5' align='center'>
+              {profile.user.name}
+            </Typography>
+            <Avatar src={profile.avatar} className={classes.avatar} />
+            <form onSubmit={handlePhotoSubmit}>
+              <div>
+                <input
+                  accept='image/*'
+                  className={classes.imgInput}
+                  id='icon-button-file'
+                  type='file'
+                  value={fileInputState}
+                  onChange={handleFileInputChange}
+                />
+                <label htmlFor='icon-button-file'>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    startIcon={<PhotoCamera />}
+                    component='span'
+                    type='button'
+                  >
+                    Upload photo
+                  </Button>
+                </label>
+              </div>
+              <Button
+                variant='contained'
+                color='primary'
+                type='submit'
+                style={{ letterSpacing: "2px" }}
+              >
+                Apply avatar
+              </Button>
+            </form>
+
+            {previewSource && (
+              <img src={previewSource} alt='abc' style={{ height: "300px" }} />
+            )}
           </Grid>
           <Grid item xs={12} sm={8} lg={9}>
             266

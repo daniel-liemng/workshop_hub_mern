@@ -6,13 +6,13 @@ import "./index.css";
 import App from "./App";
 import { theme } from "./customTheme/theme";
 
-import { UserProvider } from "./context/UserContext";
+import { AppProvider } from "./context/AppContext";
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
-    <UserProvider>
+    <AppProvider>
       <App />
-    </UserProvider>
+    </AppProvider>
   </ThemeProvider>,
   document.getElementById("root")
 );

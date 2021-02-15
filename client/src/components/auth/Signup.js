@@ -24,7 +24,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import { useUserContext } from "../../context/UserContext";
+import { useAppContext } from "../../context/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   rootStyle: {
@@ -49,7 +49,7 @@ const Signup = ({ handleChange }) => {
 
   const history = useHistory();
 
-  const { register, error, clearError, isAuthenticated } = useUserContext();
+  const { register, error, clearError, isAuthenticated } = useAppContext();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);

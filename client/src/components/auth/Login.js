@@ -13,7 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import { useUserContext } from "../../context/UserContext";
+import { useAppContext } from "../../context/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   rootStyle: {
@@ -38,7 +38,7 @@ const Login = ({ handleChange }) => {
 
   const history = useHistory();
 
-  const { login, error, clearError, isAuthenticated } = useUserContext();
+  const { login, error, clearError, isAuthenticated } = useAppContext();
 
   const initialValues = {
     email: "",

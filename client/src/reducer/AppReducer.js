@@ -10,6 +10,9 @@ import {
   USERS_GET_REQUEST,
   USERS_GET_SUCCESS,
   USERS_GET_FAIL,
+  GET_MY_PROFILE_REQUEST,
+  GET_MY_PROFILE_SUCCESS,
+  GET_MY_PROFILE_FAIL,
 } from "../context/actionTypes";
 
 const userReducer = (state, action) => {
@@ -56,6 +59,12 @@ const userReducer = (state, action) => {
       };
     case CLEAR_ERROR:
       return { ...state, error: null };
+    case GET_MY_PROFILE_REQUEST:
+      return { ...state, loading: true, error: null };
+    case GET_MY_PROFILE_SUCCESS:
+      return { ...state, loading: false, error: null, profile: payload };
+    case GET_MY_PROFILE_FAIL:
+      return { ...state, loading: false, error: payload };
     default:
       return state;
   }

@@ -20,15 +20,13 @@ const authProtect = async (req, res, next) => {
       next();
     } catch (err) {
       console.error(err.message);
-      res
-        .status(401)
-        .json({ errors: [{ msg: "Not authorized, token failed" }] });
+      res.status(401).json({ msg: "Not authorized, token failed" });
       // throw new Error("Not authorized, token failed");
     }
   }
 
   if (!token) {
-    res.status(401).json({ errors: [{ msg: "Not authorized, no token" }] });
+    res.status(401).json({ msg: "Not authorized, no token" });
     // throw new Error("Not authorized, no token");
   }
 };
